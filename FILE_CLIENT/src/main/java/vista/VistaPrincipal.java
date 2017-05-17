@@ -5,9 +5,11 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
+import control.FileClient;
+
 public class VistaPrincipal extends JFrame{
 	
-	public VistaPrincipal(){
+	public VistaPrincipal(FileClient cliente){
 		//Create a file chooser
 		final JFileChooser fc = new JFileChooser();
 		
@@ -15,9 +17,8 @@ public class VistaPrincipal extends JFrame{
 		int returnVal = fc.showOpenDialog(this);
 		File file;
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
-		       System.out.println("You chose to open this file: " +
-		            fc.getSelectedFile().getName());
-		       file= fc.getSelectedFile();
+		      file= fc.getSelectedFile();
+		      cliente.setArchivoSeleccionado(file); 
 		    }
 	}
 

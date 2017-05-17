@@ -46,7 +46,7 @@ public class Conexion extends Thread{
 	{
 		while(true)
 		{
-			escribirMensaje("HOLAAA");
+			//escribirMensaje("HOLAAA");
 			System.out.println(recibirMensaje());
 		}
 	}
