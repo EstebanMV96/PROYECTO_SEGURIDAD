@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.security.PublicKey;
 
 public class Conexion extends Thread{
 
@@ -16,6 +17,7 @@ public class Conexion extends Thread{
 	private PrintWriter pr;
 	private ObjectOutputStream oos;  //Escribir objetos
 	private ObjectInputStream ois; 
+	private DiffieHellman dh;
 	
 	
 	public Conexion(Socket c) {
@@ -27,6 +29,7 @@ public class Conexion extends Thread{
 			pr=new PrintWriter(new OutputStreamWriter(conexion.getOutputStream(), "UTF-8"),true);
 			oos=new ObjectOutputStream(conexion.getOutputStream());
 			ois=new ObjectInputStream(conexion.getInputStream());
+			dh= new DiffieHellman();
 			
 		}catch(Exception e)
 		{
@@ -38,10 +41,16 @@ public class Conexion extends Thread{
 	
 	public void run()
 	{
-		while (true) {
-			
-			
-			
+		while(true)
+		{
+			if(recibirMensaje().equals(Protocolo.SALUDO)){
+				escribirMensaje(Protocolo.ACK);
+			}
+			else if(recibirMensaje().equals(Protocolo.PK)){
+				dh.asignarLlaveP((PublicKey) recibirObjeto());
+				escribirMensaje(Protocolo.PK);
+				escribirObjeto(dh.getPublicKey());
+			}
 		}
 	}
 	
