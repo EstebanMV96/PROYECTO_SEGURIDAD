@@ -29,36 +29,20 @@ public class Cifrador {
 	
 	private  SecretKeySpec key ;
 	
+	public void setLLave(String n)
+	{
+		System.out.println("ESTA ES LA LLAVE QUE ESTA ENTRANDO "+n);
+		key = new SecretKeySpec(n.getBytes(), "AES/CBC/PKCS5Padding");
+		
+	}
+	
 	
 	public Cifrador() throws IOException
 	{
-		BufferedReader br =new BufferedReader(new InputStreamReader(System.in));
-		System.out.println("0 PARA CIFRAR O 1 PARA DECIFRAR");
-		int n=Integer.parseInt(br.readLine());
-		System.out.println("INTRODUZCA EL NOMBRE DEL ARCHIVO");
-		String nomArchivo=br.readLine();
-		System.out.println("INTRODUZCA LA CLAVE");
-		String llaveSimetrica = br.readLine();
-		key = new SecretKeySpec(llaveSimetrica.getBytes(), "AES");
-		if(n==0)
-		cifrar(nomArchivo);
-		else
-		des(nomArchivo);
+		
 	}
 	
-	public static void main(String[] args) throws IOException {
-		   
-	new Cifrador();
-		   
-		   //Comienzo a desencriptar
-//		   cipher.init(Cipher.DECRYPT_MODE, key);
-//		   byte[] datosDecifrados = cipher.doFinal(campoCifrado);
-//		   String mensaje_original = new String(datosDecifrados);
-//		   System.out.println(mensaje_original);
-//		  } catch (Exception e) {
-//		   e.printStackTrace();
-//		  }
-	}
+
 	
 	
 	
@@ -68,6 +52,7 @@ public class Cifrador {
 			
 			Cipher cipher=Cipher.getInstance("AES");
 			cipher.init(Cipher.ENCRYPT_MODE, key);
+			
 			File archivo=new File(nomArch);
 			byte[] bytesArch=new byte[(int) archivo.length()];
 			FileInputStream fis=new FileInputStream(archivo);

@@ -1,6 +1,9 @@
 package control;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
@@ -18,19 +21,19 @@ public class Conexion extends Thread{
 	private ObjectOutputStream oos;  //Escribir objetos
 	private ObjectInputStream ois; 
 	private DiffieHellman dh;
+	private FileServer fileServer;
 	
-	
-	public Conexion(Socket c) {
+	public Conexion(Socket c, FileServer fs) {
 		
 		conexion=c;
 		try{
-			
+			fileServer=fs;
 			br=new BufferedReader(new InputStreamReader(conexion.getInputStream(),"UTF-8"));
 			pr=new PrintWriter(new OutputStreamWriter(conexion.getOutputStream(), "UTF-8"),true);
 			oos=new ObjectOutputStream(conexion.getOutputStream());
 			ois=new ObjectInputStream(conexion.getInputStream());
 			dh= new DiffieHellman();
-			
+			dh.generateKeys();
 		}catch(Exception e)
 		{
 			
@@ -43,14 +46,36 @@ public class Conexion extends Thread{
 	{
 		while(true)
 		{
-			if(recibirMensaje().equals(Protocolo.SALUDO)){
+			String r=recibirMensaje();
+			if(r.equals(Protocolo.SALUDO)){
 				escribirMensaje(Protocolo.ACK);
 			}
-			else if(recibirMensaje().equals(Protocolo.PK)){
+			if(recibirMensaje().equals(Protocolo.PK)){
 				dh.asignarLlaveP((PublicKey) recibirObjeto());
+				dh.generateCommonSecretKey();
 				escribirMensaje(Protocolo.PK);
+
 				escribirObjeto(dh.getPublicKey());
+				if(recibirMensaje().equals(Protocolo.FILE))
+				{
+					
+					byte[] bytesArch=(byte[]) recibirObjeto();
+					File n=new File("ak.protect");
+					FileOutputStream fos;
+					try {
+						fos = new FileOutputStream(n);
+						fos.write(bytesArch);
+						fos.close();
+						fileServer.des("ak.protect",dh.darClaveEnComun() );
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}
+		
 			}
+			break;
 		}
 	}
 	

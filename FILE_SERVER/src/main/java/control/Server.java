@@ -11,12 +11,13 @@ public class Server extends Thread{
 	public static final int PUERTO=5005;
 	private ServerSocket server;
 	private Socket   canal;
+	private FileServer fs;
 	
 	
-	
-	public Server() {
+	public Server(FileServer f) {
 		
 		try {
+			fs=f;
 			server=new ServerSocket(PUERTO);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -35,7 +36,7 @@ public class Server extends Thread{
 		{
 			try {
 				canal=server.accept();
-				new Conexion(canal).start();
+				new Conexion(canal,fs).start();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

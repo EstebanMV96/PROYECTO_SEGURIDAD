@@ -32,12 +32,15 @@ public class Cifrador {
 	
 	public Cifrador() throws IOException
 	{
-		String llaveSimetrica = "96AO;9OyQlY4uSGa";
-		key = new SecretKeySpec(llaveSimetrica.getBytes(), "AES");
+		
+		
 
 	}
 	
-
+	public void setLLave(String n)
+	{
+		key = new SecretKeySpec(n.getBytes(), "AES/CBC/PKCS5Padding");
+	}
 	
 	
 	

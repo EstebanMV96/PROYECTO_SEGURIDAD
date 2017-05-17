@@ -1,5 +1,6 @@
 package control;
 
+import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
@@ -45,6 +46,7 @@ public class DiffieHellman {
 	            keyAgreement.doPhase(receivedPublicKey, true);
 
 	            secretKey = shortenSecretKey(keyAgreement.generateSecret());
+	            System.out.println("LLAVE EN COMUN SERVER "+new String(secretKey, StandardCharsets.UTF_8));
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }
@@ -76,6 +78,11 @@ public class DiffieHellman {
 	  public void asignarLlaveP(PublicKey re)
 	  {
 		  receivedPublicKey=re;
+	  }
+	  
+	  public String darClaveEnComun()
+	  {
+		  return new String(secretKey, StandardCharsets.UTF_8);
 	  }
 	  
 }
