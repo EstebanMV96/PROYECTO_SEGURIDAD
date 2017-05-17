@@ -1,5 +1,7 @@
 package control;
 
+import vista.VistaPrincipal;
+
 public class FileClient {
 
 	public FileClient() {
@@ -10,6 +12,7 @@ public class FileClient {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		new FileClient();
+		new VistaPrincipal();
 	}
 
 }
