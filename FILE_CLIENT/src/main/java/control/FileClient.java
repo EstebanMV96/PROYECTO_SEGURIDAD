@@ -7,10 +7,12 @@ import vista.VistaPrincipal;
 public class FileClient {
 	
 	private File archivo;
-
+	private DiffieHellman dh;
 	public FileClient() {
 		// TODO Auto-generated constructor stub
-		new Conexion().start();
+		dh=new DiffieHellman();
+		dh.generateKeys();
+		new Conexion(dh).start();
 		inicializarVista();
 	}
 
