@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.security.PublicKey;
 
 import javax.net.ssl.SSLSocketFactory;
 
@@ -20,10 +21,10 @@ public class Conexion extends Thread{
 	private ObjectInputStream ois;
 	public static final int PUERTO=5005;
 	public String HOST="localhost";
-	
+	private DiffieHellman dh;
 	
 
-	public Conexion() {
+	public Conexion(DiffieHellman dh) {
 		
 		try{
 			
@@ -32,7 +33,7 @@ public class Conexion extends Thread{
 			pr=new PrintWriter(new OutputStreamWriter(conexion.getOutputStream(), "UTF-8"),true);
 			oos=new ObjectOutputStream(conexion.getOutputStream());
 			ois=new ObjectInputStream(conexion.getInputStream());
-			
+			this.dh=dh;
 			
 		}catch(Exception e)
 		{
@@ -46,8 +47,16 @@ public class Conexion extends Thread{
 	{
 		while(true)
 		{
-			//escribirMensaje("HOLAAA");
-			System.out.println(recibirMensaje());
+			escribirMensaje(Protocolo.SALUDO);
+			if(recibirMensaje().equals(Protocolo.ACK))
+			{
+				escribirMensaje(Protocolo.PK);
+				escribirObjeto(dh.getPublicKey());
+				if(recibirMensaje().equals(Protocolo.PK))
+				{
+					dh.asignarLlaveP((PublicKey) recibirObjeto());
+				}
+			}
 		}
 	}
 	

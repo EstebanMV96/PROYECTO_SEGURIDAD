@@ -40,8 +40,7 @@ public class Conexion extends Thread{
 	{
 		while (true) {
 			
-			//escribirMensaje("BUENOSS DIASSS");
-			System.out.println(recibirMensaje());
+			
 			
 		}
 	}
