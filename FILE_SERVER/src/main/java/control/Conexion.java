@@ -40,8 +40,8 @@ public class Conexion extends Thread{
 	{
 		while (true) {
 			
-			System.out.println(recibirMensaje());
 			escribirMensaje("BUENOSS DIASSS");
+			System.out.println(recibirMensaje());
 			
 		}
 	}
