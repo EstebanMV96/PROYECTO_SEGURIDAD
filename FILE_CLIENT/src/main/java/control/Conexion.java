@@ -50,6 +50,7 @@ public class Conexion extends Thread{
 		escribirMensaje(Protocolo.FILE);
 		escribirMensaje(nomArch);
 		escribirObjeto(arch);
+		System.out.println("MANDO EL ARCHIVO EL CLIENTE");
 //		fc.cifrarArchivo("MyLocation.txt", dh.darClaveEnComun());
 //		escribirMensaje(Protocolo.FILE);
 //		File n=new File("MyLocation.protect");

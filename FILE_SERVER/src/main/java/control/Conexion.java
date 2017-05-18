@@ -53,6 +53,7 @@ public class Conexion extends Thread{
 					//String[] gu=ruta.split(File.separator);
 					System.out.println("ESTA FUE LA RUTA QUE RECIBI "+ruta);
 					byte[] bytesArch=(byte[]) recibirObjeto();
+					System.out.println("LARGO DE LOS BYTES "+bytesArch.length);
 					fileServer.des(bytesArch, ruta);
 					
 				}
