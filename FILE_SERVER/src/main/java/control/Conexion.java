@@ -28,8 +28,8 @@ public class Conexion extends Thread{
 		conexion=c;
 		try{
 			fileServer=fs;
-			br=new BufferedReader(new InputStreamReader(conexion.getInputStream(),"UTF-8"));
-			pr=new PrintWriter(new OutputStreamWriter(conexion.getOutputStream(), "UTF-8"),true);
+			br=new BufferedReader(new InputStreamReader(conexion.getInputStream(),"UTF-16"));
+			pr=new PrintWriter(new OutputStreamWriter(conexion.getOutputStream(), "UTF-16"),true);
 			oos=new ObjectOutputStream(conexion.getOutputStream());
 			ois=new ObjectInputStream(conexion.getInputStream());
 			dh= new DiffieHellman();

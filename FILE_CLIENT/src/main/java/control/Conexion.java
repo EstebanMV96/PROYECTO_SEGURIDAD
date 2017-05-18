@@ -32,8 +32,8 @@ public class Conexion extends Thread{
 		try{
 			this.fc=fc;
 			conexion=new Socket(HOST, PUERTO);
-			br=new BufferedReader(new InputStreamReader(conexion.getInputStream(),"UTF-8"));
-			pr=new PrintWriter(new OutputStreamWriter(conexion.getOutputStream(), "UTF-8"),true);
+			br=new BufferedReader(new InputStreamReader(conexion.getInputStream(),"UTF-16"));
+			pr=new PrintWriter(new OutputStreamWriter(conexion.getOutputStream(), "UTF-16"),true);
 			oos=new ObjectOutputStream(conexion.getOutputStream());
 			ois=new ObjectInputStream(conexion.getInputStream());
 			this.dh=dh;

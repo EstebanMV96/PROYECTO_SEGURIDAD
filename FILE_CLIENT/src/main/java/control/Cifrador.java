@@ -31,8 +31,8 @@ public class Cifrador {
 	
 	public void setLLave(String n)
 	{
-		System.out.println("ESTA ES LA LLAVE QUE ESTA ENTRANDO "+n);
-		key = new SecretKeySpec(n.getBytes(), "AES/CBC/PKCS5Padding");
+		
+		key = new SecretKeySpec(n.getBytes(),0,16, "AES");
 		
 	}
 	

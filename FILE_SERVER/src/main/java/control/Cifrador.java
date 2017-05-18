@@ -39,7 +39,9 @@ public class Cifrador {
 	
 	public void setLLave(String n)
 	{
-		key = new SecretKeySpec(n.getBytes(), "AES/CBC/PKCS5Padding");
+		
+		
+		key = new SecretKeySpec(n.getBytes(),0,16, "AES");
 	}
 	
 	
@@ -73,7 +75,7 @@ public class Cifrador {
 		try{
 			Cipher cipher=Cipher.getInstance("AES");
 			String[] f=nomArch.split("\\.");
-			File arch=new File(f[0]+".backup");
+			File arch=new File(f[0]+".txt");
 			File arch1=new File(nomArch);
 			FileInputStream fis=new FileInputStream(arch1);
 			byte[] a=new byte[(int)arch1.length()];

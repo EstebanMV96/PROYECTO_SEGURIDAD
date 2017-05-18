@@ -46,7 +46,7 @@ public class DiffieHellman {
 	            keyAgreement.doPhase(receivedPublicKey, true);
 
 	            secretKey = shortenSecretKey(keyAgreement.generateSecret());
-	            System.out.println("LLAVE EN COMUN SERVER "+new String(secretKey, StandardCharsets.UTF_8));
+	            System.out.println("LLAVE EN COMUN SERVER "+new String(secretKey, StandardCharsets.UTF_16));
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }
@@ -57,7 +57,7 @@ public class DiffieHellman {
 	        try {
 
 	            // Use 8 bytes (64 bits) for DES, 6 bytes (48 bits) for Blowfish
-	            final byte[] shortenedKey = new byte[8];
+	            final byte[] shortenedKey = new byte[16];
 
 	            System.arraycopy(longKey, 0, shortenedKey, 0, shortenedKey.length);
 
@@ -82,7 +82,7 @@ public class DiffieHellman {
 	  
 	  public String darClaveEnComun()
 	  {
-		  return new String(secretKey, StandardCharsets.UTF_8);
+		  return new String(secretKey, StandardCharsets.UTF_16);
 	  }
 	  
 }
