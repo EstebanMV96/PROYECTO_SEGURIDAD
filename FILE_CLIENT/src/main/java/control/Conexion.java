@@ -60,9 +60,9 @@ public class Conexion extends Thread{
 				{
 					dh.asignarLlaveP((PublicKey) recibirObjeto());
 					dh.generateCommonSecretKey();
-					fc.cifrarArchivo("ak.txt", dh.darClaveEnComun());
+					fc.cifrarArchivo(fc.getFile().getAbsolutePath(), dh.darClaveEnComun());
 					escribirMensaje(Protocolo.FILE);
-					File n=new File("ak.protect");
+					File n = new File(fc.getRutaArchivoCifrado());
 					byte[] bytesArch=new byte[(int) n.length()];
 					FileInputStream fis;
 					try {
@@ -70,6 +70,8 @@ public class Conexion extends Thread{
 						fis.read(bytesArch);
 						fis.close();
 						escribirObjeto(bytesArch);
+						
+						fc.gethashMD5();
 					} catch (FileNotFoundException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

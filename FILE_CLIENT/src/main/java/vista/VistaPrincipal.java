@@ -19,7 +19,9 @@ public class VistaPrincipal extends JFrame{
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 		      file= fc.getSelectedFile();
 		      cliente.setArchivoSeleccionado(file); 
-		    }
+		}else{
+			System.out.println("No se seleccionó ningun archivo");
+		}
 	}
 
 }

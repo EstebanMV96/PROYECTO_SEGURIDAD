@@ -72,6 +72,7 @@ public class Conexion extends Thread{
 						e.printStackTrace();
 					}
 					
+					
 				}
 		
 			}

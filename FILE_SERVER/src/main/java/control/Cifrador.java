@@ -10,6 +10,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
@@ -23,6 +25,7 @@ import javax.crypto.Mac;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
 
 public class Cifrador {
 	
@@ -75,7 +78,7 @@ public class Cifrador {
 		try{
 			Cipher cipher=Cipher.getInstance("AES");
 			String[] f=nomArch.split("\\.");
-			File arch=new File(f[0]+".txt");
+			File arch=new File(f[0]+".mp4");
 			File arch1=new File(nomArch);
 			FileInputStream fis=new FileInputStream(arch1);
 			byte[] a=new byte[(int)arch1.length()];
@@ -84,12 +87,41 @@ public class Cifrador {
 			cipher.init(Cipher.DECRYPT_MODE, key);
 			byte[] datosDecifrados = cipher.doFinal(a);
 			FileOutputStream fos=new FileOutputStream(arch);
+			
 			fos.write(datosDecifrados);
+			gethashMD5(arch);
 			fos.close();
 			
 		}catch (Exception e) {
 		   e.printStackTrace();
 		  }
+	}
+	
+	public void gethashMD5(File arch){
+
+		MessageDigest md;
+		try {
+			md = MessageDigest.getInstance("MD5");
+			
+			byte[] bytesArch = new byte[(int) arch.length()];
+			FileInputStream fi = new FileInputStream(arch);
+			fi.read(bytesArch);
+			md.update(Files.readAllBytes(Paths.get(arch.getAbsolutePath())));
+			byte[] digest = md.digest();
+			String myHash = DatatypeConverter
+					.printHexBinary(digest).toUpperCase();
+			System.out.println("Mi CheckSum MD5 SERVER   "+ myHash);
+			fi.close();
+			md.reset();
+
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
 	}
 
  
