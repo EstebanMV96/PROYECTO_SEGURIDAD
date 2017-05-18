@@ -14,8 +14,11 @@ public class FileServer {
 	
 	private Server servidor;
 	private Cifrador cifra;
+	private DiffieHellman df;
 	public FileServer() {
 		
+		df=new DiffieHellman();
+		df.generateKeys();
 		try {
 			cifra=new Cifrador();
 		} catch (IOException e) {
@@ -35,13 +38,16 @@ public class FileServer {
 	}
 	
 	
-	public void des(String nomArch,String clave)
+	public void des(byte[] nomArch,String ruta)
 	{
-		cifra.setLLave(clave);
-		cifra.des(nomArch);
+		cifra.setLLave(df.darClaveEnComun());
+		cifra.des(nomArch,ruta);
 	}
 
-	 
+	public DiffieHellman darDiffi()
+	{
+		return df;
+	}
 	
 
 }

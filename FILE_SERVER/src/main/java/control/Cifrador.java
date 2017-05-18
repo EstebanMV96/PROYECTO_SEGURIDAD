@@ -70,19 +70,13 @@ public class Cifrador {
 	
 	}
 	
-	public void des(String nomArch)
+	public void des(byte[] info,String rutaDes)
 	{
 		try{
 			Cipher cipher=Cipher.getInstance("AES");
-			String[] f=nomArch.split("\\.");
-			File arch=new File(f[0]+".txt");
-			File arch1=new File(nomArch);
-			FileInputStream fis=new FileInputStream(arch1);
-			byte[] a=new byte[(int)arch1.length()];
-			fis.read(a);
-			fis.close();
+			File arch=new File(rutaDes);
 			cipher.init(Cipher.DECRYPT_MODE, key);
-			byte[] datosDecifrados = cipher.doFinal(a);
+			byte[] datosDecifrados = cipher.doFinal(info);
 			FileOutputStream fos=new FileOutputStream(arch);
 			fos.write(datosDecifrados);
 			fos.close();

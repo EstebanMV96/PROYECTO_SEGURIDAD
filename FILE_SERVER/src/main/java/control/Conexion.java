@@ -20,7 +20,7 @@ public class Conexion extends Thread{
 	private PrintWriter pr;
 	private ObjectOutputStream oos;  //Escribir objetos
 	private ObjectInputStream ois; 
-	private DiffieHellman dh;
+	
 	private FileServer fileServer;
 	
 	public Conexion(Socket c, FileServer fs) {
@@ -32,8 +32,7 @@ public class Conexion extends Thread{
 			pr=new PrintWriter(new OutputStreamWriter(conexion.getOutputStream(), "UTF-16"),true);
 			oos=new ObjectOutputStream(conexion.getOutputStream());
 			ois=new ObjectInputStream(conexion.getInputStream());
-			dh= new DiffieHellman();
-			dh.generateKeys();
+			intercambioClaves();
 		}catch(Exception e)
 		{
 			
@@ -46,38 +45,22 @@ public class Conexion extends Thread{
 	{
 		while(true)
 		{
-			String r=recibirMensaje();
-			if(r.equals(Protocolo.SALUDO)){
-				escribirMensaje(Protocolo.ACK);
-			}
-			if(recibirMensaje().equals(Protocolo.PK)){
-				dh.asignarLlaveP((PublicKey) recibirObjeto());
-				dh.generateCommonSecretKey();
-				escribirMensaje(Protocolo.PK);
-
-				escribirObjeto(dh.getPublicKey());
+		
+		
 				if(recibirMensaje().equals(Protocolo.FILE))
 				{
-					
+					String ruta=recibirMensaje();
+					//String[] gu=ruta.split(File.separator);
+					System.out.println("ESTA FUE LA RUTA QUE RECIBI "+ruta);
 					byte[] bytesArch=(byte[]) recibirObjeto();
-					File n=new File("ak.protect");
-					FileOutputStream fos;
-					try {
-						fos = new FileOutputStream(n);
-						fos.write(bytesArch);
-						fos.close();
-						fileServer.des("ak.protect",dh.darClaveEnComun() );
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					fileServer.des(bytesArch, ruta);
 					
 				}
 		
 			}
-			break;
+			
 		}
-	}
+	
 	
 	
 	
@@ -146,6 +129,23 @@ public class Conexion extends Thread{
 			
 			
 		}
+	}
+	
+	public void intercambioClaves()
+	{
+		if(recibirMensaje().equals(Protocolo.SALUDO)){
+			escribirMensaje(Protocolo.ACK);
+			if(recibirMensaje().equals(Protocolo.PK)){
+				fileServer.darDiffi().asignarLlaveP((PublicKey) recibirObjeto());
+				fileServer.darDiffi().generateCommonSecretKey();
+				escribirMensaje(Protocolo.PK);
+				escribirObjeto(fileServer.darDiffi().getPublicKey());
+				
+			}
+		}
+		
+		
+	
 	}
 
 }

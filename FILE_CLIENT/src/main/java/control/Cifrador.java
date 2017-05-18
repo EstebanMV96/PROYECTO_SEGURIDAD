@@ -46,28 +46,27 @@ public class Cifrador {
 	
 	
 	
-	public void cifrar(String nomArch)
+	public byte[] cifrar(String nomArch)
 	{
 		 try {
 			
 			Cipher cipher=Cipher.getInstance("AES");
-			cipher.init(Cipher.ENCRYPT_MODE, key);
-			
+			cipher.init(Cipher.ENCRYPT_MODE, key);	
 			File archivo=new File(nomArch);
 			byte[] bytesArch=new byte[(int) archivo.length()];
 			FileInputStream fis=new FileInputStream(archivo);
 			fis.read(bytesArch);
 			fis.close();
-			String[] gu=nomArch.split("\\.");
+			//String[] gu=nomArch.split("\\.");
 			byte[] campoCifrado = cipher.doFinal(bytesArch);
-			FileOutputStream fos=new FileOutputStream(new File(gu[0]+".protect"));
-			fos.write(campoCifrado);
-			fos.close();
 			System.out.println("ARCHIVO CIFRADO");
+			return campoCifrado;
 		 }catch(Exception e)
 		 {
 			 e.printStackTrace();
 		 }
+		 
+		 return null;
 	
 	}
 	

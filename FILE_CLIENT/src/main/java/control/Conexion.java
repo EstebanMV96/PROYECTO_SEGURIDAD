@@ -24,10 +24,10 @@ public class Conexion extends Thread{
 	private ObjectInputStream ois;
 	public static final int PUERTO=5005;
 	public String HOST="localhost";
-	private DiffieHellman dh;
+	
 	private FileClient fc;
 
-	public Conexion(DiffieHellman dh, FileClient fc) {
+	public Conexion(FileClient fc) {
 		
 		try{
 			this.fc=fc;
@@ -36,8 +36,7 @@ public class Conexion extends Thread{
 			pr=new PrintWriter(new OutputStreamWriter(conexion.getOutputStream(), "UTF-16"),true);
 			oos=new ObjectOutputStream(conexion.getOutputStream());
 			ois=new ObjectInputStream(conexion.getInputStream());
-			this.dh=dh;
-			
+			negociarClaves();
 		}catch(Exception e)
 		{
 			
@@ -46,42 +45,38 @@ public class Conexion extends Thread{
 	}
 	
 	
+	public void enviarArchivoEncriptado(byte[] arch,String nomArch)
+	{
+		escribirMensaje(Protocolo.FILE);
+		escribirMensaje(nomArch);
+		escribirObjeto(arch);
+//		fc.cifrarArchivo("MyLocation.txt", dh.darClaveEnComun());
+//		escribirMensaje(Protocolo.FILE);
+//		File n=new File("MyLocation.protect");
+//		byte[] bytesArch=new byte[(int) n.length()];
+//		FileInputStream fis;
+//		try {
+//			fis = new FileInputStream(n);
+//			fis.read(bytesArch);
+//			fis.close();
+//			escribirObjeto(bytesArch);
+//		} catch (FileNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
+	}
+	
+	
 	public void run()
 	{
 		while(true)
 		{
-			escribirMensaje(Protocolo.SALUDO);
-			if(recibirMensaje().equals(Protocolo.ACK))
-			{
-				escribirMensaje(Protocolo.PK);
-				
-				escribirObjeto(dh.getPublicKey());
-				if(recibirMensaje().equals(Protocolo.PK))
-				{
-					dh.asignarLlaveP((PublicKey) recibirObjeto());
-					dh.generateCommonSecretKey();
-					fc.cifrarArchivo("ak.txt", dh.darClaveEnComun());
-					escribirMensaje(Protocolo.FILE);
-					File n=new File("ak.protect");
-					byte[] bytesArch=new byte[(int) n.length()];
-					FileInputStream fis;
-					try {
-						fis = new FileInputStream(n);
-						fis.read(bytesArch);
-						fis.close();
-						escribirObjeto(bytesArch);
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-				}
-			}
+			String r=recibirMensaje();
 			
-			break;
 		}
 	}
 	
@@ -150,6 +145,25 @@ public class Conexion extends Thread{
 		} catch (Exception e) {
 			
 			
+		}
+	}
+	
+	
+	public void negociarClaves()
+	{
+		escribirMensaje(Protocolo.SALUDO);
+		if(recibirMensaje().equals(Protocolo.ACK))
+		{
+			escribirMensaje(Protocolo.PK);
+			
+			escribirObjeto(fc.darDiffi().getPublicKey());
+			if(recibirMensaje().equals(Protocolo.PK))
+			{
+				fc.darDiffi().asignarLlaveP((PublicKey) recibirObjeto());
+				fc.darDiffi().generateCommonSecretKey();
+			
+				
+			}
 		}
 	}
 

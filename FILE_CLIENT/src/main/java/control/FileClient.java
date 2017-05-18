@@ -3,17 +3,44 @@ package control;
 import java.io.File;
 import java.io.IOException;
 
-import vista.VistaPrincipal;
+import org.omg.CORBA.portable.ApplicationException;
 
-public class FileClient {
+import interfaz.Ventana;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.application.Application;
+
+public class FileClient extends Application{
 	
-	private File archivo;
+	
 	private DiffieHellman dh;
 	private Cifrador cifra;
+	private Conexion canal;
 	
+
+
+	public static void main(String[] args) {
+		
+		launch(args);
+		
+	}
 	
-	public FileClient() {
-		// TODO Auto-generated constructor stub
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		System.out.println("entrooo");
+		inicializarTodo();
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaz/ventana.fxml"));
+		Parent root = loader.load();
+		Ventana vent=loader.getController();
+		vent.asignarFc(this);
+		primaryStage.setScene(new Scene(root));		
+		primaryStage.show();
+	}
+	
+	public void inicializarTodo()
+	{
 		dh=new DiffieHellman();
 		dh.generateKeys();
 		try {
@@ -22,29 +49,26 @@ public class FileClient {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		new Conexion(dh,this).start();
-		//inicializarVista();
-	}
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		new FileClient();
+		canal=new Conexion(this);
+		canal.start();
 	}
 	
-	public void setArchivoSeleccionado(File f){
-		archivo=f;
-		
-		System.out.println("Archivo seleccionado: "+f.getAbsolutePath());
-	}
 	
-	public void inicializarVista(){
-		new VistaPrincipal(this);
-	}
 	
-	public void cifrarArchivo(String ruta,String clave)
+	public void enviarArchivoCifrado(String ruta,String nombre)
 	{
-		cifra.setLLave(clave);
-		cifra.cifrar(ruta);
+		cifra.setLLave(dh.darClaveEnComun());
+		byte[] arch=cifra.cifrar(ruta);
+		
+		if(arch!=null)
+		canal.enviarArchivoEncriptado(arch, nombre);
+		else
+			System.out.println("FALLO LA ENCRIPTACION");
+	}
+	
+	public DiffieHellman darDiffi()
+	{
+		return dh;
 	}
 
 }
