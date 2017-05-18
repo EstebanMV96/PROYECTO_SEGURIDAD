@@ -35,7 +35,7 @@ public class FileClient {
 	public void setArchivoSeleccionado(File f)
 	{
 		archivo=f;
-		System.out.println("Archivo seleccionado: "+f.getAbsolutePath()+ " "+ f.length());
+		System.out.println("Archivo seleccionado: "+f.getAbsolutePath());
 	}
 	
 	public void inicializarVista(){

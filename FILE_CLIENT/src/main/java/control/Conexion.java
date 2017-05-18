@@ -67,6 +67,7 @@ public class Conexion extends Thread{
 					fc.cifrarArchivo(fc.getRuta(), dh.darClaveEnComun());
 					File n=new File(fc.getRutaCifrado());
 					byte[] bytesArch=new byte[(int) n.length()];
+					
 					FileInputStream fis;
 					try {
 						fis = new FileInputStream(n);
