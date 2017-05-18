@@ -28,25 +28,20 @@ public class Cifrador {
 	
 	
 	private  SecretKeySpec key ;
-	
-	public void setLLave(String n)
-	{
-		
-		key = new SecretKeySpec(n.getBytes(),0,16, "AES");
-		
-	}
-	
-	
+
+
 	public Cifrador() throws IOException
 	{
 		
 	}
-	
 
+	public void setLLave(String n)
+	{
+		key = new SecretKeySpec(n.getBytes(),0,16, "AES");		
+	}
 	
 	
-	
-	public void cifrar(String nomArch)
+	public File cifrar(String nomArch)
 	{
 		 try {
 			
@@ -64,14 +59,16 @@ public class Cifrador {
 			fos.write(campoCifrado);
 			fos.close();
 			System.out.println("ARCHIVO CIFRADO");
+			return archivo;
 		 }catch(Exception e)
 		 {
 			 e.printStackTrace();
+			 return null;
 		 }
 	
 	}
 	
-	public void des(String nomArch)
+	public void descifrar(String nomArch)
 	{
 		try{
 			Cipher cipher=Cipher.getInstance("AES");
@@ -92,7 +89,4 @@ public class Cifrador {
 		   e.printStackTrace();
 		  }
 	}
-
- 
-
 }

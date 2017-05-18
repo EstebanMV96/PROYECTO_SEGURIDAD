@@ -10,6 +10,7 @@ public class FileClient {
 	private File archivo;
 	private DiffieHellman dh;
 	private Cifrador cifra;
+	private String rutaCifrado;
 	
 	
 	public FileClient() {
@@ -22,8 +23,8 @@ public class FileClient {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		inicializarVista();
 		new Conexion(dh,this).start();
-		//inicializarVista();
 	}
 
 	public static void main(String[] args) {
@@ -31,20 +32,32 @@ public class FileClient {
 		new FileClient();
 	}
 	
-	public void setArchivoSeleccionado(File f){
+	public void setArchivoSeleccionado(File f)
+	{
 		archivo=f;
-		
-		System.out.println("Archivo seleccionado: "+f.getAbsolutePath());
+		System.out.println("Archivo seleccionado: "+f.getAbsolutePath()+ " "+ f.length());
 	}
 	
 	public void inicializarVista(){
 		new VistaPrincipal(this);
 	}
 	
-	public void cifrarArchivo(String ruta,String clave)
+	public void cifrarArchivo(String ruta, String clave)
 	{
 		cifra.setLLave(clave);
-		cifra.cifrar(ruta);
+		File cifrado= cifra.cifrar(ruta);
+		rutaCifrado= cifrado.getAbsolutePath();
+		 
+	}
+	
+	public String getRutaCifrado(){
+		System.out.println(rutaCifrado);
+		return rutaCifrado;
+	}
+
+	public String getRuta(){
+		System.out.println(archivo.getAbsolutePath());
+		return archivo.getAbsolutePath();
 	}
 
 }

@@ -17,16 +17,16 @@ import javax.net.ssl.SSLSocketFactory;
 
 public class Conexion extends Thread{
 	
-	private Socket   conexion;
+	private Socket conexion;
 	private BufferedReader br;  
 	private PrintWriter pr;
-	private ObjectOutputStream oos;  //Escribir objetos
+	private ObjectOutputStream oos; 
 	private ObjectInputStream ois;
 	public static final int PUERTO=5005;
 	public String HOST="localhost";
 	private DiffieHellman dh;
 	private FileClient fc;
-
+	
 	public Conexion(DiffieHellman dh, FileClient fc) {
 		
 		try{
@@ -51,18 +51,21 @@ public class Conexion extends Thread{
 		while(true)
 		{
 			escribirMensaje(Protocolo.SALUDO);
+			System.out.println("Hola");
 			if(recibirMensaje().equals(Protocolo.ACK))
 			{
+				System.out.println("ACK");
 				escribirMensaje(Protocolo.PK);
 				
 				escribirObjeto(dh.getPublicKey());
 				if(recibirMensaje().equals(Protocolo.PK))
 				{
+					System.out.println("PK");
 					dh.asignarLlaveP((PublicKey) recibirObjeto());
 					dh.generateCommonSecretKey();
-					fc.cifrarArchivo("ak.txt", dh.darClaveEnComun());
 					escribirMensaje(Protocolo.FILE);
-					File n=new File("ak.protect");
+					fc.cifrarArchivo(fc.getRuta(), dh.darClaveEnComun());
+					File n=new File(fc.getRutaCifrado());
 					byte[] bytesArch=new byte[(int) n.length()];
 					FileInputStream fis;
 					try {

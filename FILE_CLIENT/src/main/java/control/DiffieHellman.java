@@ -14,8 +14,7 @@ public class DiffieHellman {
 	 private PublicKey  publicKey;
 	 private PublicKey  receivedPublicKey;
 	 private byte[]     secretKey;
-	 private String     secretMessage;
-	
+	 
 	
 	  public PublicKey getPublicKey() {
 
@@ -59,18 +58,12 @@ public class DiffieHellman {
 
 	        try {
 
-	            // Use 8 bytes (64 bits) for DES, 6 bytes (48 bits) for Blowfish
 	            final byte[] shortenedKey = new byte[16];
 
 	            System.arraycopy(longKey, 0, shortenedKey, 0, shortenedKey.length);
 	            System.out.println("LARGO ACORTADO "+shortenedKey.length);
 	            return shortenedKey;
 
-	            // Below lines can be more secure
-	            // final SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
-	            // final DESKeySpec       desSpec    = new DESKeySpec(longKey);
-	            //
-	            // return keyFactory.generateSecret(desSpec).getEncoded();
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }
